@@ -17,7 +17,7 @@ class Fonction
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['fonction'])]
+    #[Groups(['fonction', 'contact'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -31,7 +31,7 @@ class Fonction
     #[ORM\ManyToOne(inversedBy: 'fonctions')]
     #[Groups(['fonction'])]
 
-    private ?Contact $contacts = null;
+    private ?Contact $contact = null;
 
     public function getId(): ?int
     {

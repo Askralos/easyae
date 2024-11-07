@@ -16,7 +16,7 @@ class ContactLink
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['contactLink'])]
+    #[Groups(['contactLink', 'contact'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]

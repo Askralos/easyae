@@ -22,13 +22,11 @@ class Contact
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['client'])]
+    #[Groups(['contact'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 15)]
-
-    #[Groups(['client', 'contact'])]
-
+    #[Groups(['contact'])]
     private ?string $name = null;
 
     /**
@@ -36,8 +34,8 @@ class Contact
      */
     #[ORM\OneToMany(targetEntity: ContactLink::class, mappedBy: 'contact')]
     #[Groups(['contact'])]
-
     private Collection $link;
+
     /**    
      * @var Collection<int, Fonction>
      */

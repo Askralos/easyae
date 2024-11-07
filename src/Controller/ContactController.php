@@ -13,7 +13,6 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Cache\TagAwareCacheInterface;
 
@@ -23,7 +22,6 @@ class ContactController extends AbstractController
 {
     #[Route(name: 'api_contact_index', methods: ["GET"])]
     #[IsGranted("ROLE_ADMIN", message: "MESSAGE CONTACT")]
-
     public function getAll(ContactRepository $contactRepository, SerializerInterface $serializer, TagAwareCacheInterface $cache): JsonResponse
     {
 
@@ -33,10 +31,9 @@ class ContactController extends AbstractController
             $contactList = $contactRepository->findAll();
     
             $contactJson = $serializer->serialize($contactList, 'json', ['groups' => "contact"]);
-            
             return $contactJson;
-
         });
+
 
         return new JsonResponse($contactJson, JsonResponse::HTTP_OK, [], true);
     }
@@ -51,19 +48,11 @@ class ContactController extends AbstractController
     }
 
     #[Route(name: 'api_contact_new', methods: ["POST"])]
-    public function create(ValidatorInterface $validator, TagAwareCacheInterface $cache, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
+    public function create(TagAwareCacheInterface $cache, Request $request, SerializerInterface $serializer, EntityManagerInterface $entityManager): JsonResponse
     {
         $contact = $serializer->deserialize($request->getContent(), Contact::class, 'json');
-        
-        $contact->setStatus("on")
-            ->setCreatedAt(new \DateTime())
-            ->setUpdatedAt(new \DateTime());
-
-        $errors = $validator->validate($contact);
-        if (count($errors) > 0) {
-            return new JsonResponse($serializer->serialize($errors, 'json'), JsonResponse::HTTP_BAD_REQUEST, [], true);
-        }
-
+        $contact->setStatus("on");
+          
         $entityManager->persist($contact);
         $entityManager->flush();
 

@@ -72,7 +72,7 @@ class FacturationModelController extends AbstractController
 
         $entityManager->persist($updatedFacturationModel);
         $entityManager->flush();
-        $cache->invalidateTags(tag: ["facturationModel","client"]);
+        $cache->invalidateTags(["facturationModel","client"]);
         $facturationModelJson = $serializer->serialize($updatedFacturationModel, 'json', ['groups' => "facturationModel"]);
         $location = $urlGenerator->generate("api_facturation_model_show", ['id' => $updatedFacturationModel->getId()], UrlGeneratorInterface::ABSOLUTE_URL);
         return new JsonResponse(null, JsonResponse::HTTP_NO_CONTENT, ["Location" => $location]);
